@@ -50,7 +50,17 @@ public class DocumentStub implements Document {
 
     @Override
     public void append(char c) {
+        MethodCallMessage message = new MethodCallMessage(messageManager.getMyAddress(), "append");
+        message.setParameter("c",String.valueOf(c));
+        messageManager.send(message,networkAddress);
+        MethodCallMessage reply = messageManager.wReceive();
 
+        if (reply.getMethodName().equals("appendReply")) {
+            System.out.println("Received reply with name: " + reply.getMethodName());
+        } else {
+            System.out.println("Reply with name " + reply.getMethodName() + " is wrong!");
+            // throw new RuntimeException("Received reply is not equal to setTextReply! Instead received: " + reply.getMethodName());
+        }
     }
 
     @Override

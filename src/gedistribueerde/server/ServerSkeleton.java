@@ -61,10 +61,15 @@ public class ServerSkeleton {
                 server.toLower(toLowerDocument);
                 messageManager.send(new MethodCallMessage(messageManager.getMyAddress(),"toLowerReply"),request.getOriginator());
                 break;
-            case "append" :
+            case "type" :
                 documentSkeletonAddress = request.getParameter("documentSkeletonAddress");
                 documentSkeletonIp = documentSkeletonAddress.split(":")[0];
                 documentSkeletonPort = Integer.parseInt(documentSkeletonAddress.split(":")[1]);
+
+                Document appendDocument = new DocumentStub(new NetworkAddress(documentSkeletonIp,documentSkeletonPort));
+                String appendText = request.getParameter("typeText");
+                server.type(appendDocument,appendText);
+                messageManager.send(new MethodCallMessage(messageManager.getMyAddress(),"typeReply"),request.getOriginator());
 
 
         }
