@@ -19,7 +19,6 @@ public class ServerSkeleton {
     }
 
     public void run() {
-        System.out.println("Server is running on address " + messageManager.getMyAddress().toString());
         while (true) {
             MethodCallMessage request = messageManager.wReceive();
             handleRequest(request);
@@ -27,7 +26,7 @@ public class ServerSkeleton {
     }
 
     private void handleRequest(MethodCallMessage request){
-        System.out.println("Request received with name: " + request.getMethodName());
+        System.out.println("Request received: " + request.getMethodName());
         String documentSkeletonAddress;
         String documentSkeletonIp;
         int documentSkeletonPort;
@@ -47,7 +46,6 @@ public class ServerSkeleton {
                 documentSkeletonAddress = request.getParameter("documentSkeletonAddress");
                 documentSkeletonIp = documentSkeletonAddress.split(":")[0];
                 documentSkeletonPort = Integer.parseInt(documentSkeletonAddress.split(":")[1]);
-
                 Document toUpperDocument = new DocumentStub(new NetworkAddress(documentSkeletonIp,documentSkeletonPort));
                 server.toUpper(toUpperDocument);
                 messageManager.send(new MethodCallMessage(messageManager.getMyAddress(),"toUpperReply"),request.getOriginator());
@@ -56,7 +54,6 @@ public class ServerSkeleton {
                 documentSkeletonAddress = request.getParameter("documentSkeletonAddress");
                 documentSkeletonIp = documentSkeletonAddress.split(":")[0];
                 documentSkeletonPort = Integer.parseInt(documentSkeletonAddress.split(":")[1]);
-
                 Document toLowerDocument = new DocumentStub(new NetworkAddress(documentSkeletonIp,documentSkeletonPort));
                 server.toLower(toLowerDocument);
                 messageManager.send(new MethodCallMessage(messageManager.getMyAddress(),"toLowerReply"),request.getOriginator());
@@ -65,15 +62,10 @@ public class ServerSkeleton {
                 documentSkeletonAddress = request.getParameter("documentSkeletonAddress");
                 documentSkeletonIp = documentSkeletonAddress.split(":")[0];
                 documentSkeletonPort = Integer.parseInt(documentSkeletonAddress.split(":")[1]);
-
                 Document appendDocument = new DocumentStub(new NetworkAddress(documentSkeletonIp,documentSkeletonPort));
                 String appendText = request.getParameter("typeText");
                 server.type(appendDocument,appendText);
                 messageManager.send(new MethodCallMessage(messageManager.getMyAddress(),"typeReply"),request.getOriginator());
-
-
         }
     }
-
-
 }
